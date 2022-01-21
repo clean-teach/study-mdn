@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Object-oriented JavaScript example</title>
+  </head>
+
+  <body>
+    <p>This example requires you to enter commands in your browser's JavaScript console (see <a href="https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_are_browser_developer_tools">What are browser developer tools</a> for more information).</p>
+
+  </body>
+
+  <script>
+      // function createNewPerson(name) {
+      //   var obj = {};
+      //   obj.name = name;
+      //   obj.greeting = function() {
+      //     alert('Hi! I\'m ' + this.name + '.');
+      //   };
+      //   return obj;
+      // }
+      // var salva = createNewPerson('Salva');
+      // console.log(salva.name);
+      // console.log(salva.greeting());
+
+      // 자바스크립트는 빈 굳이 객체를 만들고 리턴하는 과정을 간단한 형태도 단축하는 명령을 제공한다.
+      // 아래 참고
+      function CreateNewPerson(name) {
+        this.name = name;
+        this.greeting = function() {
+          alert('Hi! I\'m ' + this.name + '.');
+        };
+      }
+      // 생성자 함수는 클래스의 자바스크립트 버전
+      // 생성자 함수는 아무것도 리턴하지 않고 객체를 만들지도 않는다. 단순히 프로퍼티와 메소드를 정의한다.
+      // 또 이를 정의할 때 this 라는 키워드를 사용한다
+      // 관습적으로 생성자 함수명은 대문자로 시작
+      var person1 = new CreateNewPerson('Bob');
+      var person2 = new CreateNewPerson('Sarah');
+      // new 키워들를 사용하여 새로운 객체 인스턴스를 만들고 결과를 변수에 담는다.
+
+
+      function Person(first, last, age, gender, interests) {
+        this.name = {
+          'first': first,
+          'last' : last
+        };
+        this.age = age;
+        this.gender = gender;
+        this.interests = interests;
+        this.bio = function() {
+          let genderPronoun = 'They';
+          if(this.gender === 'male'){
+            genderPronoun = 'He';
+          }else if(this.gender === 'female'){
+            genderPronoun = 'She';
+          }
+          let sentence = this.name.first + ' ' + this.name.last + ' is ' + this.age + ' years old. ' + genderPronoun + ' likes ';
+          if(this.interests.length === 1){
+            sentence += this.interests[0];
+          }else{
+            for(let i = 0; i < this.interests.length; i++){
+              if(i === 0){
+                sentence += this.interests[i];
+              }else{
+                sentence += ' and ' + this.interests[i];
+              }
+            }
+          }
+          sentence += '.';
+          console.log(sentence);
+        };
+        this.greeting = function() {
+          alert('Hi! I\'m ' + this.name.first + '.');
+        };
+      }
+      var person1 = new Person('Bob', 'Smith', 32, 'un', ['music', 'skiing','sex', 'football']);
+
+      var emptyObject = new Object(); // 빈 객체 생성 함수
+      emptyObject.name = 'Chris';
+      emptyObject['age'] = 38;
+      emptyObject.greeting = function(){
+        console.log('Hi! I\'m ' + this.name + '.');
+      };
+
+      var object2 = new Object({ // 빈 객체를 따로 만들지 않고 바로 메소드 정의
+        name: '정상수',
+        age: 38,
+        greeting: function(){
+          console.log('Hi! I\'m ' + this.name + '.');
+        }
+      });
+
+      var object3 = Object.create(object2); // 이미 존재하는 객체를 이용해 새로운 객체를 만듦
+
+      var person3 = new person1.constructor('찬우', '임', 29, 'deepdark',['큰 가슴', '무정부']);
+
+      console.log('↓');
+      // console.log(object3.greeting());
+      // console.log(object3.valueOf());
+      // console.log(object2.__proto__.__proto__);
+      // console.log(object3.__proto__.__proto__);
+      // console.log(Object.getPrototypeOf(object3));
+      // console.log(Person.prototype);
+      // console.log(person1.prototype);
+      // console.log(Object.prototype);
+      // console.log(person1.constructor);
+      // console.log(person2.constructor);
+      // console.log(person3.bio());
+      // console.log(person3.constructor.name);
+  </script>
+</html>

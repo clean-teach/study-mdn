@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <title>Number guessing game</title>
+
+    <style>
+      html {
+        font-family: sans-serif;
+      }
+
+      body {
+        width: 50%;
+        max-width: 800px;
+        min-width: 480px;
+        margin: 0 auto;
+      }
+
+      .lastResult {
+        color: white;
+        padding: 3px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Number guessing game</h1>
+
+    <div class="link">참고 : 
+      <a href="https://developer.mozilla.org/ko/docs/Learn/JavaScript/First_steps/A_first_splash">MDN : 예제 - 숫자맞추기</a>
+    </div>
+    <div class="mission">
+      <div class="human-language">
+        <h2>미션 : </h2>
+        나는 간단하게 숫자 맞추기 게임을 만들고 싶다.1과 100사의 수 중에서 무작위로 선택되어야하고, 플레이어는 10번의 기회안에 그 숫자를 맞춰야 한다. 각 순서마다 숫자를 맞춰는지 틀렸는지는 당연히 알려줘야 하고, 틀렸다면 큰지 작은지도 포함해서 말해야 한다.또한 이전에 써냈던 번호들도 보여줘야 한다. 게임은 플레이어가 숫자를 맞추던가, 기회를 모두 소진하면 끝나게 된다. 게임이 끝나면 플레이어가 다시 게임을 할 것인지 묻게된다.
+      </div>
+      <div class="pseud-code">
+        <h2>의사코드 : </h2>
+        <ol>
+          <li>1과 100사이의 숫자 중 무작위로 추출한다.</li>
+          <li>1부터 플레이어의 차례를 기록한다.</li>
+          <li>플레이어에게 숫자를 맞출 수 있게 한다.</li>
+          <li>숫자를 맞추면 어딘가에 저장하고, 사용자는 이전의 추측한 숫자를 볼 수 있도록 한다.</li>
+          <li>그다음, 숫자가 일치한지 확인한다.</li>
+          <li>만약 일치한다면:
+            <ol>
+              <li>축하 메시지를 표시한다.</li>
+              <li>더 이상 숫자를 맞출필요가 없다.</li>
+              <li>플레이어가 다시 게임을 할지 묻는다.</li>
+            </ol>
+          </li>
+          <li>숫자가 틀렸고, 차례가 남아있다면:
+            <ol>
+              <li>틀렸다고 알린다.</li>
+              <li>다른 숫자를 입력할 수 있도록 한다.</li>
+              <li>차례가 1 증가한다.</li>
+            </ol>
+          </li>
+          <li>숫자가 틀렸고, 차례가 없다면:
+            <ol>
+              <li>게임이 종료되었음을 알린다.</li>
+              <li>더 이상 숫자를 맞출필요가 없다.</li>
+              <li>플레이어가 다시 게임을 할지 묻는다.</li>
+            </ol>
+          </li>
+          <li>게임이 재시작 되면, 게임의 구조와 UI는 완전히 리셋되며, step1 부터 다시 로직이 시작된다.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="game">
+      <h2>Game : </h2>
+      <p>We have selected a random number between 1 and 100. See if you can guess it in 10 turns or fewer. We'll tell you if your guess was too high or too low.</p>
+
+      <div class="form">
+        <label for="guessField">Enter a guess: </label>
+        <input type="text" id="guessField" class="guessField">
+        <input type="submit" value="Submit guess" class="guessSubmit">
+      </div>
+
+      <div class="resultParas">
+        <p class="guesses"></p>
+        <p class="lastResult"></p>
+        <p class="lowOrHi"></p>
+      </div>
+    </div>
+
+    <script>
+      // Your JavaScript goes here
+      let randomNumber = Math.floor(Math.random() * 100) + 1;
+
+      const guesses = document.querySelector('.guesses');
+      const lastResult = document.querySelector('.lastResult');
+      const lowOrHi = document.querySelector('.lowOrHi');
+      const guessSubmit = document.querySelector('.guessSubmit');
+      const guessField = document.querySelector('.guessField');
+
+      let guessCount = 1;
+      let resetButton;
+
+      guessField.focus();
+
+      function checkGuess() {
+        const userGuess = Number(guessField.value);
+        if(guessCount === 1){
+          guesses.textContent = 'Previous guesses: ';
+        }
+        guesses.textContent += userGuess + ' ';
+
+        if(userGuess === randomNumber){
+          lastResult.textContent = 'Congratulation! You got if right!';
+          lastResult.style.backgroundColor = 'green';
+          lowOrHi.textContent = '';
+          setGameOver();
+        }else if(guessCount === 10){
+          lastResult.textContent = '!!!GAME OVER!!!';
+          setGameOver();
+        }else{
+          lastResult.textContent = 'Wrong!';
+          lastResult.style.backgroundColor = 'red';
+          if(userGuess < randomNumber){
+            lowOrHi.textContent = 'Last guess was too low!';
+          }else if(userGuess > randomNumber){
+            lowOrHi.textContent = 'Last guess was too high!';
+          }
+        }
+        guessCount++;
+        guessField.value = '';
+        guessField.focus();
+      }
+
+      guessSubmit.addEventListener('click', checkGuess);
+
+      function setGameOver(){
+        guessField.disabled = true;
+        guessSubmit.disabled = true;
+        resetButton = document.createElement('button');
+        resetButton.textContent = 'Start New Game';
+        document.body.appendChild(resetButton);
+        resetButton.addEventListener('click', resetGame);
+      }
+
+      function resetGame(){
+        guessCount = 1;
+
+        const resetParas = document.querySelectorAll('.resultParas p');
+        for(let i = 0; i < resetParas.length; i++){
+          resetParas[i].textContent = '';
+        }
+
+        resetButton.parentNode.removeChild(resetButton);
+
+        guessField.disabled = false;
+        guessSubmit.disabled = false;
+        guessField.value = '';
+        guessField.focus();
+
+        lastResult.style.backgroundColor = 'white';
+
+        randomNumber = Math.floor(Math.random() * 100) + 1;
+      }
+    </script>
+  </body>
+</html>

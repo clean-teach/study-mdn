@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON TEST</title>
+</head>
+<body>
+    <section></section>
+
+<script>
+    const section = document.querySelector('section');
+
+    let para1 = document.createElement('p');
+    let para2 = document.createElement('p');
+
+    let motherInfo = 'The mother cats are called ';
+    let kittenInfo;
+
+    fetch('sample.json')
+    .then(response => response.text())
+    .then(text => {displayCatInfo(text)
+    })
+
+    function displayCatInfo(catString) {
+        let total = 0;
+        let male = 0;
+
+        // Add your code here
+        const catParse = JSON.parse(catString);
+        for(let i = 0; i < catParse.length; i++){
+            if(i != 0){
+                motherInfo += ', ' + catParse[i].name;
+            }else{
+                motherInfo += ' ' + catParse[i].name;
+            }
+
+            for(let j = 0; j < catParse[i].kittens.length; j++){
+                total += j;
+                if(catParse[i].kittens[j].gender === 'm'){
+                    male ++;
+                }
+            }
+        }
+        total += 1;
+        kittenInfo = JSON.stringify({
+            total : total,
+            male : male,
+            female : total - male
+        });
+
+        // Don't edit the code below here!
+
+        para1.textContent = motherInfo;
+        para2.textContent = kittenInfo;
+    }
+
+    section.appendChild(para1);
+    section.appendChild(para2);
+</script>
+</body>
+</html>

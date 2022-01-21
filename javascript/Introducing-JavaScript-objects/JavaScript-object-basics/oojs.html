@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Object-oriented JavaScript example</title>
+  </head>
+
+  <body>
+    <p>This example requires you to enter commands in your browser's JavaScript console (see <a href="https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_are_browser_developer_tools">What are browser developer tools</a> for more information).</p>
+
+  </body>
+
+    <script>
+        var person = {
+            name: {
+                first: 'Bob', 
+                last: 'Smith'
+            },
+            age: 32,
+            gender: 'male',
+            interests: ['music', 'skiing'],
+            bio: function() {
+                alert(this.name.first + ' ' + this.name.last + ' is ' + this.age + ' years old. he likes ' + this.interests[0] + ' and ' + this.interests[1] + '.');
+            },
+            greeting: function() {
+                alert('Hi! I\'m ' + this.name.first + '.'); // this는 객체리터럴을 직접 지정해서 사용하는 경우보다, 동적으로 객체를 생성(생성자)하는 경우 매우 유용
+            }
+        };
+
+        console.log(person.age);
+        console.log(person['age']); // 괄호 표기법
+        console.log(person['name']['last']); // 괄호 표기법, 객체 안의 객체는 이렇게 접근
+
+        person.age = 45; // 반환 뿐만 아니라, 갱신도 가능
+        console.log(person.age);
+
+        person['eyes'] = 'hazel'; // 기존에 존재하는 프로퍼티 뿐만 아니라, 완전히 새로운 멤버도 동적으로 생성 가능
+        person.farewell = function(){alert('Bye everybody');} // 새로운 메소드도 동적으로 생성 가능
+        console.log(person['eyes']);
+        console.log(person.farewell());
+
+        // 멤버의 값을 동적으로 변경할 수 있을 뿐만 아니라, 멤버의 이름까지도 동적으로 사용할 수 있다. (키와 벨류를 변수로 지정)
+        // var myDataName = nameInput.value;
+        // var myDataValue = nameValue.value;
+        var myDataName = 'height';
+        var myDataValue = '1.75m';
+
+        person[myDataName] = myDataValue;
+
+        console.log(person.height);
+    </script>
+</html>
